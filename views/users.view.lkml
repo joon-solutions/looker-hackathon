@@ -19,8 +19,13 @@ view: users {
 
   dimension: age {
     type: number
-    tiers: [0,18,31,46]
     sql: ${TABLE}.age ;;
+  }
+
+  dimension: age_group {
+    type: tier
+    tiers: [0,18,31,46]
+    sql: ${age} ;;
   }
 
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
