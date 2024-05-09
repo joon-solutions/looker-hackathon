@@ -59,17 +59,6 @@ view: order_items {
     sql: ${TABLE}.sale_price ;;
   }
 
-  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
-  # measures for this dimension, but you can also add measures of many different aggregates.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
-
-  measure: total_sale_price {
-    type: sum
-    sql: ${sale_price} ;;  }
-  measure: average_sale_price {
-    type: average
-    sql: ${sale_price} ;;  }
-
   dimension_group: shipped {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
@@ -86,6 +75,42 @@ view: order_items {
     # hidden: yes
     sql: ${TABLE}.user_id ;;
   }
+
+  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
+  # measures for this dimension, but you can also add measures of many different aggregates.
+  # Click on the type parameter to see all the options in the Quick Help panel on the right.
+
+  measure: total_sales {
+    type: sum
+    sql: ${sale_price} ;;
+    value_format_name: usd
+  }
+
+  measure: average_sale_price {
+    type: average
+    sql: ${sale_price} ;;
+    value_format_name: usd
+
+  }
+
+  measure: total_orders {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
+  measure: total_customers {
+    type: count_distinct
+    sql: ${user_id} ;;
+  }
+
+  measure: avo {
+    label: "AVO (Average Order Value)"
+    description: "Sales value per order"
+    type: number
+    sql: ${total_sales}/${total_orders} ;;
+    value_format_name: usd
+  }
+
   measure: count {
     type: count
     drill_fields: [detail*]
@@ -94,14 +119,14 @@ view: order_items {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-	id,
-	users.last_name,
-	users.id,
-	users.first_name,
-	products.name,
-	products.id,
-	orders.order_id
-	]
+  id,
+  users.last_name,
+  users.id,
+  users.first_name,
+  products.name,
+  products.id,
+  orders.order_id
+  ]
   }
 
 }
