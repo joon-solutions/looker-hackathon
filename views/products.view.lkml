@@ -17,14 +17,15 @@ view: products {
     # A dimension is a groupable field that can be used to filter query results.
     # This dimension will be called "Brand" in Explore.
 
-  dimension: brand {
+  dimension: product_brand {
     type: string
     sql: ${TABLE}.brand ;;
   }
 
-  dimension: category {
+  dimension: product_category {
     type: string
     sql: ${TABLE}.category ;;
+    drill_fields: [product_drill*]
   }
 
   dimension: cost {
@@ -36,13 +37,6 @@ view: products {
   # measures for this dimension, but you can also add measures of many different aggregates.
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
-  measure: total_cost {
-    type: sum
-    sql: ${cost} ;;  }
-  measure: average_cost {
-    type: average
-    sql: ${cost} ;;  }
-
   dimension: department {
     type: string
     sql: ${TABLE}.department ;;
@@ -53,7 +47,7 @@ view: products {
     sql: ${TABLE}.distribution_center_id ;;
   }
 
-  dimension: name {
+  dimension: product_name {
     type: string
     sql: ${TABLE}.name ;;
   }
@@ -67,8 +61,23 @@ view: products {
     type: string
     sql: ${TABLE}.sku ;;
   }
+
   measure: count {
     type: count
-    drill_fields: [id, name, order_items.count]
+    drill_fields: [id, product_name, order_items.count]
+  }
+
+  measure: total_cost {
+    type: sum
+    sql: ${cost} ;;
+  }
+
+  measure: average_cost {
+    type: average
+    sql: ${cost} ;;
+  }
+
+  set: product_drill {
+    fields: [product_brand,product_name]
   }
 }
