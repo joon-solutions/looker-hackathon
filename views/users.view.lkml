@@ -19,6 +19,7 @@ view: users {
 
   dimension: age {
     type: number
+    tiers: [0,18,31,46]
     sql: ${TABLE}.age ;;
   }
 
